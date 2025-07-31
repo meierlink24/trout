@@ -3,6 +3,7 @@
   - Handles choice to proceed or abort installation
 */
 
+
 use std::io::{self, Write};
 use crate::installer;
 
@@ -16,7 +17,7 @@ pub fn start() {
         io::stdin().read_line(&mut s).unwrap();
         let s                             =                                  s.trim().parse::<u8>().unwrap_or(0);
 
-        if(s == 1)                                                            { installer::begin_install(); }
+        if s == 1                                                            { installer::begin_install(); }
         else                                                                  { information_window(); }
 }
 

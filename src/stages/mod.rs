@@ -1,0 +1,9 @@
+pub mod start;
+pub mod cleanwipe;
+pub mod dualboot;
+pub mod diskpartition;
+pub mod diskmount;
+pub mod internet;
+pub mod boot;
+pub mod fstab;
+pub mod chroot;

@@ -1,12 +1,13 @@
-use std::io::{self, Write};
-use std::process::Command;
-
-use crate::stages::{diskpartition, diskmount, internet, boot, fstab, chroot};
-
 /*
 * Lists disks using lsblk and confirms user selection
+  - Returns: selected disk path (e.g., /dev/sda)
 */
-fn select_disk() -> String {
+
+
+use std::process::Command;
+use std::io::{self, Write};
+
+pub fn select_disk() -> String {
         println!                                                              ("Available disks:");
         Command::new("sh")
                 .arg("-c")
@@ -23,36 +24,24 @@ fn select_disk() -> String {
         disk.trim().to_string()
 }
 
+
 /*
 * Wipes all partition signatures and data on the given disk
 */
-fn wipe_disk(disk: &str) {
+
+pub fn wipe_disk(disk: &str) {
         println!                                                              ("Wiping all data on {} ...", disk);
         let cmd                          =                                   format!("sgdisk --zap-all {}", disk);
         Command::new("sh")
                 .arg("-c")
-                .arg(&cmd)
+                .arg(cmd)
                 .status()
                 .expect("Failed to wipe disk");
 
         let cmd2                         =                                   format!("wipefs -a {}", disk);
         Command::new("sh")
                 .arg("-c")
-                .arg(&cmd2)
+                .arg(cmd2)
                 .status()
                 .expect("Failed to clean filesystem signatures");
-}
-
-/*
-* Clean wipe full setup function
-*/
-pub fn clean_wipe() {
-        let disk                         =                                   select_disk();
-        wipe_disk(&disk);
-        diskpartition::partition_disk(&disk);
-        diskmount::mount_partitions();
-        internet::verify_internet();
-        boot::install_base();
-        fstab::generate_fstab();
-        chroot::enter_chroot();
 }

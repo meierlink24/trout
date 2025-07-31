@@ -1,3 +1,6 @@
+mod installer;
+mod stages;
+
 fn main() {
-    println!("Hello, world!");
+        stages::start::start();
 }
